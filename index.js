@@ -85,6 +85,25 @@ const questionsToAddEmployee = [
     },
 ];
 
+const questionsToUpdateEmployee = [
+    {
+        name: 'employeeName',
+        type: 'list',
+        message: 'Which employee\'s role do you want to update?',
+        choices: function () {
+            return employee.getEmployeeNames();
+        }
+    },
+    {
+        name: 'updatedRoleTitle',
+        type: 'list',
+        message: 'Which role do you want to assign the selected employee?',
+        choices: function () {
+            return role.getRoleTitles();
+        }
+    },
+];
+
 const init = function () {
     inquirer
         .prompt(initialQuestions)
@@ -98,7 +117,8 @@ const init = function () {
                     break;
                 case 'Add a department':
                     const newDepartmentObj = await inquirer.prompt(questionToAddDepartment);
-                    department.addDepartment(newDepartmentObj.name)
+                    const { name } = newDepartmentObj;
+                    department.addDepartment(name)
                         .then(() => {
                             init();
                         });
@@ -131,8 +151,17 @@ const init = function () {
                             init();
                         })
                     break;
+                case 'Update an employee role':
+                    const updatedEmployeeObj = await inquirer.prompt(questionsToUpdateEmployee);
+                    const { employeeName, updatedRoleTitle } = updatedEmployeeObj;
+                    employee.updateEmployee(employeeName, updatedRoleTitle)
+                        .then(() => {
+                            init();
+                        })
+                    break;
                 case 'Quit':
                     connection.end();
+                    break;
             }
         })
 };
