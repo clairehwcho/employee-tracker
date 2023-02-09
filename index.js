@@ -1,54 +1,57 @@
 const inquirer = require('inquirer');
-const {
-    showAllDepartments,
-    showAllRoles,
-    showAllEmployees
-} = require('./db/queries');
+const { connection } = require('./config/connection');
+const Department = require('./lib/Department');
+const Role = require('./lib/Role');
+const Employee = require('./lib/Employee');
 
-const questions = [
+// A list of questions for initial prompt
+const initialQuestions = [
     {
-        name: 'menu',
+        name: 'userChoice',
         type: 'list',
         message: 'What would you like to do?',
         choices: [
             'View all departments',
             'View all roles',
-            'View all employees'
+            'View all employees',
             // 'Add a department',
             // 'Add a role',
             // 'Add an employee',
             // 'Update an employee role'
+            'Quit'
         ]
     }
 ];
 
 const init = function () {
     inquirer
-        .prompt(questions)
+        .prompt(initialQuestions)
         .then((answers) => {
-            if (answers.menu === 'View all departments') {
-                showAllDepartments();
+            switch (answers.userChoice) {
+                case 'View all departments':
+                    const department = new Department();
+                    department.showAllDepartments()
+                        .then(() => {
+                            init();
+                        });
+                    break;
+                case 'View all roles':
+                    const role = new Role();
+                    role.showAllRoles()
+                        .then(() => {
+                            init();
+                        });
+                    break;
+                case 'View all employees':
+                    const employee = new Employee();
+                    employee.showAllEmployees()
+                        .then(() => {
+                            init();
+                        });
+                    break;
+                case 'Quit':
+                    connection.end();
             }
-            else if (answers.menu === 'View all roles') {
-                showAllRoles();
-            }
-            else if (answers.menu === 'View all employees') {
-                showAllEmployees();
-            }
-            // else if (answers.menu === 'Add a department') {
-            //     // add department name
-            // }
-            // else if (answers.menu === 'Add a role') {
-            //     // add role name, salary, department
-            // }
-            // else if (answers.menu === 'Add an employee') {
-            //     // add first name, last name, role, manager
-            // }
-            // else if (answers.menu === 'Update an employee role') {
-            //     // show choices of employees
-            //     // choose employee and enter new role
-            // }
-
         })
 };
 
