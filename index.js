@@ -1,6 +1,6 @@
 // Import packages and modules
 const inquirer = require('inquirer');
-const { connection } = require('./config/connection');
+const connection = require('./config/connection');
 const Department = require('./lib/Department');
 const Role = require('./lib/Role');
 const Employee = require('./lib/Employee');
@@ -27,9 +27,9 @@ const initialQuestions = [
             'View employees by manager',
             'View employees by department',
             'Add employee',
-            'Delete employee',
             'Update employee role',
             'Update employee manager',
+            'Delete employee',
             'View the total utilized budget of department',
             'Quit'
         ]
