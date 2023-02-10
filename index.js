@@ -22,12 +22,13 @@ const initialQuestions = [
             'View all employees',
             'Add an employee',
             'Update an employee role',
+            'Update an employee manager',
             'Quit'
         ]
     }
 ];
 
-const questionToAddDepartment = [
+const departmentQuestions = [
     {
         name: 'name',
         type: 'input',
@@ -35,7 +36,7 @@ const questionToAddDepartment = [
     }
 ];
 
-const questionsToAddRole = [
+const roleQuestions = [
     {
         name: 'title',
         type: 'input',
@@ -56,8 +57,8 @@ const questionsToAddRole = [
     }
 ];
 
-const questionsToAddEmployee = [
-    {
+const employeeQuestions = [
+    [{
         name: 'firstName',
         type: 'input',
         message: 'What is the employee\'s first name?'
@@ -82,12 +83,9 @@ const questionsToAddEmployee = [
         choices: function () {
             return employee.getEmployeeNames();
         }
-    },
-];
-
-const questionsToUpdateEmployee = [
-    {
-        name: 'employeeName',
+    }],
+    [{
+        name: 'updatedRoleEmployeeName',
         type: 'list',
         message: 'Which employee\'s role do you want to update?',
         choices: function () {
@@ -101,7 +99,23 @@ const questionsToUpdateEmployee = [
         choices: function () {
             return role.getRoleTitles();
         }
+    }],
+    [{
+        name: 'updatedManagerEmployeeName',
+        type: 'list',
+        message: 'Which employee\'s manager do you want to update?',
+        choices: function () {
+            return employee.getEmployeeNames();
+        }
     },
+    {
+        name: 'updatedManagerName',
+        type: 'list',
+        message: 'Which manager do you want to assign the selected employee?',
+        choices: function () {
+            return employee.getEmployeeNames();
+        }
+    }],
 ];
 
 const init = function () {
@@ -116,10 +130,11 @@ const init = function () {
                         });
                     break;
                 case 'Add a department':
-                    const newDepartmentObj = await inquirer.prompt(questionToAddDepartment);
+                    const newDepartmentObj = await inquirer.prompt(departmentQuestions);
                     const { name } = newDepartmentObj;
                     department.addDepartment(name)
                         .then(() => {
+                            console.info(`'${name}' added to the database`);
                             init();
                         });
                     break;
@@ -130,7 +145,7 @@ const init = function () {
                         });
                     break;
                 case 'Add a role':
-                    const newRoleObj = await inquirer.prompt(questionsToAddRole);
+                    const newRoleObj = await inquirer.prompt(roleQuestions);
                     const { title, salary, departmentName } = newRoleObj;
                     role.addRole(title, salary, departmentName)
                         .then(() => {
@@ -144,7 +159,7 @@ const init = function () {
                         });
                     break;
                 case 'Add an employee':
-                    const newEmployeeObj = await inquirer.prompt(questionsToAddEmployee);
+                    const newEmployeeObj = await inquirer.prompt(employeeQuestions[0]);
                     const { firstName, lastName, roleTitle, managerName } = newEmployeeObj;
                     employee.addEmployee(firstName, lastName, roleTitle, managerName)
                         .then(() => {
@@ -152,9 +167,17 @@ const init = function () {
                         })
                     break;
                 case 'Update an employee role':
-                    const updatedEmployeeObj = await inquirer.prompt(questionsToUpdateEmployee);
-                    const { employeeName, updatedRoleTitle } = updatedEmployeeObj;
-                    employee.updateEmployee(employeeName, updatedRoleTitle)
+                    const updatedRoleObj = await inquirer.prompt(employeeQuestions[1]);
+                    const { updatedRoleEmployeeName, updatedRoleTitle } = updatedRoleObj;
+                    employee.updateEmployeeRole(updatedRoleEmployeeName, updatedRoleTitle)
+                        .then(() => {
+                            init();
+                        })
+                    break;
+                case 'Update an employee manager':
+                    const updatedManagerObj = await inquirer.prompt(employeeQuestions[2]);
+                    const { updatedManagerEmployeeName, updatedManagerName } = updatedManagerObj;
+                    employee.updateEmployeeManager(updatedManagerEmployeeName, updatedManagerName)
                         .then(() => {
                             init();
                         })
