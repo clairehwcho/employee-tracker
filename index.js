@@ -20,6 +20,8 @@ const initialQuestions = [
             'View all roles',
             'Add a role',
             'View all employees',
+            'View employees by manager',
+            'View employees by department',
             'Add an employee',
             'Update an employee role',
             'Update an employee manager',
@@ -28,6 +30,7 @@ const initialQuestions = [
     }
 ];
 
+// A list of questions regarding departments
 const departmentQuestions = [
     {
         name: 'name',
@@ -36,6 +39,7 @@ const departmentQuestions = [
     }
 ];
 
+// A list of questions regarding roles
 const roleQuestions = [
     {
         name: 'title',
@@ -57,7 +61,9 @@ const roleQuestions = [
     }
 ];
 
+// A list of questions regarding employees
 const employeeQuestions = [
+    // Questions to add a new employee
     [{
         name: 'firstName',
         type: 'input',
@@ -84,6 +90,7 @@ const employeeQuestions = [
             return employee.getEmployeeNames();
         }
     }],
+    // Questions to update employee's role
     [{
         name: 'updatedRoleEmployeeName',
         type: 'list',
@@ -100,6 +107,7 @@ const employeeQuestions = [
             return role.getRoleTitles();
         }
     }],
+    // Questions to update employee's manager
     [{
         name: 'updatedManagerEmployeeName',
         type: 'list',
@@ -115,7 +123,7 @@ const employeeQuestions = [
         choices: function () {
             return employee.getEmployeeNames();
         }
-    }],
+    }]
 ];
 
 const init = function () {
@@ -154,6 +162,18 @@ const init = function () {
                     break;
                 case 'View all employees':
                     employee.showAllEmployees()
+                        .then(() => {
+                            init();
+                        });
+                    break;
+                case 'View employees by manager':
+                    employee.showEmployeesByManager()
+                        .then(() => {
+                            init();
+                        });
+                    break;
+                case 'View employees by department':
+                    employee.showEmployeesByDepartment()
                         .then(() => {
                             init();
                         });
