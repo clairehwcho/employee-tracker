@@ -78,3 +78,18 @@ GROUP BY
     department.name
 ORDER BY
     department.id ASC;
+
+-- showBudgetByDepartment query
+SELECT
+    department.id,
+    department.name AS department,
+    SUM(role.salary) AS total_utilized_budget
+From
+    employee
+    LEFT JOIN role ON role.id = employee.role_id
+    LEFT JOIN department ON department.id = role.department_id
+    LEFT Join employee AS manager ON manager.id = employee.manager_id
+GROUP BY
+    department.name
+ORDER BY
+    department.id ASC;

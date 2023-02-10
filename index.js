@@ -28,6 +28,7 @@ const initialQuestions = [
             'Delete employee',
             'Update employee role',
             'Update employee manager',
+            'View the total utilized budget of department',
             'Quit'
         ]
     }
@@ -253,6 +254,12 @@ const init = function () {
                     const deletedEmployeeObj = await inquirer.prompt(employeeQuestions[3]);
                     const { deletedEmployee } = deletedEmployeeObj;
                     employee.deleteEmployee(deletedEmployee)
+                        .then(() => {
+                            init();
+                        });
+                    break;
+                case 'View the total utilized budget of department':
+                    department.showBudgetByDepartment()
                         .then(() => {
                             init();
                         });
