@@ -16,15 +16,18 @@ const initialQuestions = [
         message: 'What would you like to do?',
         choices: [
             'View all departments',
-            'Add a department',
+            'Add department',
+            'Delete department',
             'View all roles',
-            'Add a role',
+            'Add role',
+            'Delete role',
             'View all employees',
             'View employees by manager',
             'View employees by department',
-            'Add an employee',
-            'Update an employee role',
-            'Update an employee manager',
+            'Add employee',
+            'Delete employee',
+            'Update employee role',
+            'Update employee manager',
             'Quit'
         ]
     }
@@ -32,16 +35,27 @@ const initialQuestions = [
 
 // A list of questions regarding departments
 const departmentQuestions = [
-    {
+    // Question to add a department
+    [{
         name: 'name',
         type: 'input',
         message: 'What is the name of the department?'
-    }
+    }],
+    // Question to delete a department
+    [{
+        name: 'deletedDepartment',
+        type: 'list',
+        message: 'Which department do you want to delete?',
+        choices: function () {
+            return department.getDepartmentNames();
+        }
+    }]
 ];
 
 // A list of questions regarding roles
 const roleQuestions = [
-    {
+    // Questions to add a role
+    [{
         name: 'title',
         type: 'input',
         message: 'What is the title of the role?',
@@ -58,7 +72,16 @@ const roleQuestions = [
         choices: function () {
             return department.getDepartmentNames();
         }
-    }
+    }],
+    // Question to delete a role
+    [{
+        name: 'deletedRole',
+        type: 'list',
+        message: 'Which role do you want to delete?',
+        choices: function () {
+            return role.getRoleTitles();
+        }
+    }]
 ];
 
 // A list of questions regarding employees
@@ -123,6 +146,15 @@ const employeeQuestions = [
         choices: function () {
             return employee.getEmployeeNames();
         }
+    }],
+    // Question to delete an employee
+    [{
+        name: 'deletedEmployee',
+        type: 'list',
+        message: 'Who do you want to delete?',
+        choices: function () {
+            return employee.getEmployeeNames();
+        }
     }]
 ];
 
@@ -137,12 +169,19 @@ const init = function () {
                             init();
                         });
                     break;
-                case 'Add a department':
-                    const newDepartmentObj = await inquirer.prompt(departmentQuestions);
+                case 'Add department':
+                    const newDepartmentObj = await inquirer.prompt(departmentQuestions[0]);
                     const { name } = newDepartmentObj;
                     department.addDepartment(name)
                         .then(() => {
-                            console.info(`'${name}' added to the database`);
+                            init();
+                        });
+                    break;
+                case 'Delete department':
+                    const deletedDepartmentObj = await inquirer.prompt(departmentQuestions[1]);
+                    const { deletedDepartment } = deletedDepartmentObj;
+                    department.deleteDepartment(deletedDepartment)
+                        .then(() => {
                             init();
                         });
                     break;
@@ -152,10 +191,18 @@ const init = function () {
                             init();
                         });
                     break;
-                case 'Add a role':
-                    const newRoleObj = await inquirer.prompt(roleQuestions);
+                case 'Add role':
+                    const newRoleObj = await inquirer.prompt(roleQuestions[0]);
                     const { title, salary, departmentName } = newRoleObj;
                     role.addRole(title, salary, departmentName)
+                        .then(() => {
+                            init();
+                        });
+                    break;
+                case 'Delete role':
+                    const deletedRoleObj = await inquirer.prompt(roleQuestions[1]);
+                    const { deletedRole } = deletedRoleObj;
+                    role.deleteRole(deletedRole)
                         .then(() => {
                             init();
                         });
@@ -178,7 +225,7 @@ const init = function () {
                             init();
                         });
                     break;
-                case 'Add an employee':
+                case 'Add employee':
                     const newEmployeeObj = await inquirer.prompt(employeeQuestions[0]);
                     const { firstName, lastName, roleTitle, managerName } = newEmployeeObj;
                     employee.addEmployee(firstName, lastName, roleTitle, managerName)
@@ -186,7 +233,7 @@ const init = function () {
                             init();
                         })
                     break;
-                case 'Update an employee role':
+                case 'Update employee role':
                     const updatedRoleObj = await inquirer.prompt(employeeQuestions[1]);
                     const { updatedRoleEmployeeName, updatedRoleTitle } = updatedRoleObj;
                     employee.updateEmployeeRole(updatedRoleEmployeeName, updatedRoleTitle)
@@ -194,13 +241,21 @@ const init = function () {
                             init();
                         })
                     break;
-                case 'Update an employee manager':
+                case 'Update employee manager':
                     const updatedManagerObj = await inquirer.prompt(employeeQuestions[2]);
                     const { updatedManagerEmployeeName, updatedManagerName } = updatedManagerObj;
                     employee.updateEmployeeManager(updatedManagerEmployeeName, updatedManagerName)
                         .then(() => {
                             init();
                         })
+                    break;
+                case 'Delete employee':
+                    const deletedEmployeeObj = await inquirer.prompt(employeeQuestions[3]);
+                    const { deletedEmployee } = deletedEmployeeObj;
+                    employee.deleteEmployee(deletedEmployee)
+                        .then(() => {
+                            init();
+                        });
                     break;
                 case 'Quit':
                     connection.end();
