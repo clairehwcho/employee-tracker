@@ -1,9 +1,11 @@
+// Import packages and modules
 const inquirer = require('inquirer');
 const { connection } = require('./config/connection');
 const Department = require('./lib/Department');
 const Role = require('./lib/Role');
 const Employee = require('./lib/Employee');
 
+// Create new class objects
 const department = new Department();
 const role = new Role();
 const employee = new Employee();
@@ -159,6 +161,7 @@ const employeeQuestions = [
     }]
 ];
 
+// The init function prompts user to create, read, update, and delete employees data.
 const init = function () {
     inquirer
         .prompt(initialQuestions)
@@ -271,4 +274,5 @@ const init = function () {
         })
 };
 
+// Initialize the app in node.js.
 init();

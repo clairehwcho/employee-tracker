@@ -70,9 +70,9 @@ SELECT
         SEPARATOR ', '
         ) AS employees
 From
-    employee
-    LEFT JOIN role ON role.id = employee.role_id
-    LEFT JOIN department ON department.id = role.department_id
+    department
+    LEFT JOIN role ON role.department_id = department.id
+    LEFT JOIN employee ON employee.role_id = role.id
     LEFT Join employee AS manager ON manager.id = employee.manager_id
 GROUP BY
     department.name
@@ -85,9 +85,9 @@ SELECT
     department.name AS department,
     SUM(role.salary) AS total_utilized_budget
 From
-    employee
-    LEFT JOIN role ON role.id = employee.role_id
-    LEFT JOIN department ON department.id = role.department_id
+    department
+    LEFT JOIN role ON role.department_id = department.id
+    LEFT JOIN employee ON employee.role_id = role.id
     LEFT Join employee AS manager ON manager.id = employee.manager_id
 GROUP BY
     department.name
