@@ -113,7 +113,7 @@ const employeeQuestions = [
         type: 'list',
         message: 'Who is the employee\'s manager?',
         choices: function () {
-            return employee.getEmployeeNames();
+            return employee.getManagerNames();
         }
     }],
     // Questions to update employee's role
@@ -147,7 +147,7 @@ const employeeQuestions = [
         type: 'list',
         message: 'Which manager do you want to assign the selected employee?',
         choices: function () {
-            return employee.getEmployeeNames();
+            return employee.getManagerNames();
         }
     }],
     // Question to delete an employee
