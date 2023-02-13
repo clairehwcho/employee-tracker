@@ -14,16 +14,26 @@ This is a command-line application that manages a company's employee database, u
 
 ## Installation
 - Install [Node.js v16](https://nodejs.org/en/blog/release/v16.16.0/) and [npm](https://www.npmjs.com/)
+- Install [MySQL Server](https://dev.mysql.com/doc/mysql-getting-started/en/#mysql-getting-started-installing)
 - Install npm packages:
   ```
   npm install
   ```
 
 ## Usage
-- Execute the app:
-  ```
-  npm start
-  ```
+1. Create your database and seed test data into the database with MySQL shell commands:
+    ```
+    mysql -u root -p
+    ```
+    ```shell
+    mysql> source db/schema.sql;
+    mysql> source db/seeds.sql;
+    mysql> quit;
+    ```
+2. Execute the app:
+    ```
+    npm start
+    ```
 - Walkthrough video
 <video src="https://user-images.githubusercontent.com/106784125/218016874-35230aca-69c7-4a38-a463-fee43c72b2d0.mp4"></video>
   - Features demonstrated in the video
